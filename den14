@@ -1,0 +1,51 @@
+1. Install
+Use our script for a quick installation:
+
+wget -q -O anoma.sh https://api.nodes.guru/anoma.sh && chmod +x anoma.sh && sudo /bin/bash anoma.sh
+Wait for the installation to complete, then run the command:
+
+source $HOME/.bash_profile
+You can check the node logs with the following command:
+
+journalctl -u anomad -f
+2. Creating a key
+Don’t forget to specify your values instead of YOUR_WALLET_NAME, YOUR_VALIDATOR_NAME and YOUR_ACCOUNT_ALIAS.
+Generate a new key with the command:
+
+anoma wallet key gen --alias YOUR_WALLET_NAME
+After full synchronization, send a transaction to initialize the account:
+
+anomac init-account --alias YOUR_ACCOUNT_ALIAS --public-key YOUR_WALLET_NAME --source YOUR_WALLET_NAME
+3. Faucet
+Request tokens from the faucet with the command:
+
+anoma client transfer --source faucet --target YOUR_ACCOUNT_ALIAS --signer YOUR_ACCOUNT_ALIAS --token XAN --amount 1000
+Verify your balance:
+
+anoma client balance --token XAN --owner YOUR_ACCOUNT_ALIAS 
+4. Creating a validator
+This command will generate the keys needed to start the validator (you will need to enter a password):
+
+anoma client init-validator --alias YOUR_VALIDATOR_NAME --source YOUR_ACCOUNT_ALIAS
+After that we restart the node:
+
+sudo systemctl restart anomad 
+Now we delegate more tokens to our validator:
+
+anoma client bond --source YOUR_ACCOUNT_ALIAS --validator YOUR_VALIDATOR_NAME --amount 950
+You can check all delegations with the command:
+
+anoma client bonds --owner YOUR_ACCOUNT_ALIAS 
+5. Additional
+Show all keys:
+
+anoma wallet key list
+Generate a new key:
+
+anoma wallet key gen --alias YOUR_WALLET_NAME
+List all known addresses:
+
+anoma wallet address list
+Create a new address:
+
+anoma wallet address gen --alias YOUR_NEW_WALLET_ALIAS
